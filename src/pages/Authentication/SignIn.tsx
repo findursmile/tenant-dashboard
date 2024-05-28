@@ -6,25 +6,40 @@ import Logo from '../../images/logo/logo.svg';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-
-
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePassword = (password: string) => password.length >= 6;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setEmailError('');
+    setPasswordError('');
+    if (!validateEmail(email)) {
+      setEmailError('Please enter a valid email address.');
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      setPasswordError('Password must be at least 6 characters long.');
+      return;
+    }
     try {
       const response = await axios.post('http://localhost:8080/api/signin',
         { email, password },
         { headers: { 'Content-Type': 'application/json' } }
         );
-      if (response.data.success) {
-        // Handle successful sign-in, e.g., redirect to the dashboard
-        console.log('Sign-in successful', response.data);
+      if (response.data.token) {
         login();
+        localStorage.setItem('token', response.data.token);
         navigate('/');
       } else {
         setError('Sign-in failed. Please check your credentials.');
@@ -212,7 +227,7 @@ const SignIn: React.FC = () => {
                     </span>
                   </div>
                 </div>
-
+                {emailError && <div className="text-red-500 mb-4">{emailError}</div>}
                 <div className="mb-6">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Password
@@ -248,6 +263,7 @@ const SignIn: React.FC = () => {
                     </span>
                   </div>
                 </div>
+                {passwordError && <div className="text-red-500 mb-4">{passwordError}</div>}
                 {error && <div className="text-red-500 mb-4">{error}</div>}
                 <div className="mb-5">
                   <input

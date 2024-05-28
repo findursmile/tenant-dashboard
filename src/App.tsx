@@ -9,7 +9,7 @@ import Calendar from './pages/Calendar';
 import ECommerce from './pages/Dashboard/ECommerce';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile.tsx';
-import Tables from './pages/Tables.tsx';
+import Events from './pages/Events.tsx';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 
@@ -47,7 +47,7 @@ function App() {
           element={
             <PrivateRoute>
               <PageTitle title="Find Your Smile | Events" />
-              <Tables />
+              <Events />
             </PrivateRoute>
           }
         />
