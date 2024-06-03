@@ -10,8 +10,11 @@ import ECommerce from './pages/Dashboard/ECommerce';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile.tsx';
 import Events from './pages/Events.tsx';
+import AddEvent from './pages/Event/Add.tsx';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
+import FormLayout from './pages/Form/FormLayout.tsx';
+import FormElements from './pages/Form/FormElements.tsx';
 
 
 function App() {
@@ -43,11 +46,38 @@ function App() {
           }
         />
         <Route
-          path="/tables"
+          path="/form"
+          element={
+            <PrivateRoute>
+              <PageTitle title="Find Your Smile | Events" />
+              <FormLayout />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/elements"
+          element={
+            <PrivateRoute>
+              <PageTitle title="Find Your Smile | Events" />
+              <FormElements />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/events"
           element={
             <PrivateRoute>
               <PageTitle title="Find Your Smile | Events" />
               <Events />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/events/add"
+          element={
+            <PrivateRoute>
+              <PageTitle title="Find Your Smile | Events" />
+              <AddEvent />
             </PrivateRoute>
           }
         />
