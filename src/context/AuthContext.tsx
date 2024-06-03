@@ -3,21 +3,24 @@ import { createContext, ReactNode, useContext, useState } from 'react';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: () => void;
+  login: (token: string) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+const tokenKey = 'token';
 
-  const login = () => {
-    setIsAuthenticated(true);
-  };
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+
+    const login = (token: string) => {
+        localStorage.setItem(tokenKey, token);
+        setIsAuthenticated(true);
+    };
 
   const logout = () => {
-    localStorage.removeItem('token')
+    localStorage.removeItem(tokenKey)
     setIsAuthenticated(false);
   };
 

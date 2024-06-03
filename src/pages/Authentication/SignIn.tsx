@@ -38,7 +38,7 @@ const SignIn: React.FC = () => {
         { headers: { 'Content-Type': 'application/json' } }
         );
       if (response.data.token) {
-        login();
+        login(response.data.token);
         localStorage.setItem('token', response.data.token);
         navigate('/');
       } else {
