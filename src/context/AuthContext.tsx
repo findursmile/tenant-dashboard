@@ -12,7 +12,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const tokenKey = 'token';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem(tokenKey));
 
     const login = (token: string) => {
         localStorage.setItem(tokenKey, token);
