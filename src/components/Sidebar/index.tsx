@@ -83,7 +83,7 @@ function Example() {
       </SidebarHeader>
       <SidebarBody>
         <SidebarSection>
-          <SidebarItem href="/home">
+          <SidebarItem href="/dashboard">
             <HomeIcon />
             <SidebarLabel>Home</SidebarLabel>
           </SidebarItem>

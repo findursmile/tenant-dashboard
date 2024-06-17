@@ -6,7 +6,7 @@ import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
 import Calendar from './pages/Calendar';
-import ECommerce from './pages/Dashboard/ECommerce';
+import Dashboard from './pages/Dashboard/Dashboard.tsx';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile.tsx';
 import Events from './pages/Events.tsx';
@@ -37,11 +37,11 @@ function App() {
         <>
       <Routes>
         <Route
-          index
+          path="/dashboard"
           element={
             <PrivateRoute>
               <PageTitle title="Find Your Smile | Dashboard" />
-              <ECommerce />
+              <Dashboard />
             </PrivateRoute>
           }
         />
