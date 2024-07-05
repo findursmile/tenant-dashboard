@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import DefaultLayout from '../../layout/DefaultLayout';
 import axios from 'axios';
-import EVENT from '../Events';
 
 const AddEvent = () => {
     const [name, setName] = useState('');
