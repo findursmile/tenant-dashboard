@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import DefaultLayout from '../../layout/DefaultLayout';
 import axios from 'axios';
@@ -20,7 +20,7 @@ const AddEvent = () => {
             event_end_at: eventEndAt,
         };
 
-        axios.post('/events', event).then(res => {
+        axios.post('/events', event).then(() => {
             navigate('/events')
         });
     }

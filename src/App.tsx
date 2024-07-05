@@ -15,6 +15,7 @@ import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import FormLayout from './pages/Form/FormLayout.tsx';
 import FormElements from './pages/Form/FormElements.tsx';
+import EventDetails from './pages/EventDetails.tsx';
 
 
 function App() {
@@ -78,6 +79,15 @@ function App() {
             <PrivateRoute>
               <PageTitle title="Find Your Smile | Events" />
               <AddEvent />
+            </PrivateRoute>
+          }
+        />
+        <Route
+            path="/events/:eventId"
+          element={
+            <PrivateRoute>
+              <PageTitle title="Find Your Smile | Edit Event" />
+              <EventDetails />
             </PrivateRoute>
           }
         />

@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import { tokenKey } from '../context/AuthContext';
 
+export const API_HOSTNAME = 'http://localhost:8080/';
 
 axios.defaults.baseURL = 'http://localhost:8080/api';
 axios.interceptors.request.use(function (config) {
