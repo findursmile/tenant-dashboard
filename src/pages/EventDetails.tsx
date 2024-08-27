@@ -13,7 +13,7 @@ export default function EventDetails() {
     const {eventId} = useParams();
 
     const getImages = () => {
-        axios.get(`../events/${eventId}/images`).then(res => {
+        axios.get(`/events/${eventId}/images`).then(res => {
             setFiles(res.data.images);
             setLoading(false);
         })
@@ -43,6 +43,9 @@ export default function EventDetails() {
     }
 
     useEffect(() => {
+        if (!eventId) {
+            return
+        }
         getEvent()
         getImages()
 

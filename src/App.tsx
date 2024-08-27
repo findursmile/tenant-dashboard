@@ -16,6 +16,7 @@ import PrivateRoute from './components/PrivateRoute';
 import FormLayout from './pages/Form/FormLayout.tsx';
 import FormElements from './pages/Form/FormElements.tsx';
 import EventDetails from './pages/EventDetails.tsx';
+import NoMatch from './common/NoMatch.tsx';
 
 
 function App() {
@@ -38,7 +39,7 @@ function App() {
         <>
       <Routes>
         <Route
-          path="/dashboard"
+          path="/"
           element={
             <PrivateRoute>
               <PageTitle title="Find Your Smile | Dashboard" />
@@ -133,6 +134,15 @@ function App() {
             <>
               <PageTitle title="Find Your Smile | Signup" />
               <SignUp />
+            </>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <>
+              <PageTitle title="Find Your Smile | Signup" />
+              <NoMatch />
             </>
           }
         />
