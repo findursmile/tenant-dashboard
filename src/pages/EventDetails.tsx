@@ -3,15 +3,8 @@ import { useParams } from "react-router-dom";
 import axios from 'axios';
 import DefaultLayout from "../layout/DefaultLayout";
 import { API_HOSTNAME } from "../common/axios";
-import { EVENT } from "./Events";
+import { EVENT, EventListItem, ImageInfo } from "./Events";
 import { Link } from "../components/catalyst/link";
-import { Cog8ToothIcon, EllipsisVerticalIcon } from "@heroicons/react/16/solid";
-import { Dropdown, DropdownButton, DropdownItem, DropdownLabel, DropdownMenu } from "../components/catalyst/dropdown";
-
-export interface ImageInfo {
-    count: number,
-        status: string,
-}
 
 export default function EventDetails() {
     const [loading, setLoading] = useState(true);
@@ -23,13 +16,6 @@ export default function EventDetails() {
         axios.get(`/events/${eventId}`).then(res => {
             setEvent(res.data.event)
             res.data.images_info && setImagesInfo(res.data.images_info);
-            setLoading(false);
-        })
-    }
-
-    const publishEvent = () => {
-        setLoading(true);
-        axios.put(`/events/${eventId}/publish`).then(() => {
             setLoading(false);
         })
     }
@@ -82,58 +68,8 @@ export default function EventDetails() {
                     </div>
 
                     <ul className="mb-10" >
-                        <li >
-                            <div className="flex items-center justify-between">
-                                <div className="flex gap-6 py-6">
-                                    <div className="w-32 shrink-0">
-                                        <Link aria-hidden="true" data-headlessui-state="" href={`/events/${event?.id}`}>
-                                            <img
-                                                className="aspect-[3/2] rounded-lg shadow"
-                                                src={API_HOSTNAME + event?.cover_photo}
-                                                alt=""
-                                            />
-                                        </Link>
-                                    </div>
-                                    <div className="space-y-1.5">
-                                        <div className="text-base/6 font-semibold">
-                                            <Link data-headlessui-state="" href={`/events/${event?.id}`}>
-                                                {event?.name}
-                                            </Link>
-                                        </div>
-                                        <div className="text-xs/6 text-zinc-500">
-                                            {event?.event_date} <span aria-hidden="true">·</span> {event?.title}
-                                        </div>
-                                        {imagesInfo.map((info, i) => (
-                                            <>
-                                                {!!i ? " | " : ""}
-                                                <div key={i} className="text-xs/6 text-zinc-600 inline-block">{info.count} {info.status}</div>
-                                            </>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                    <span className="max-sm:hidden inline-flex items-center gap-x-1.5 rounded-md px-1.5 py-0.5 text-sm/5 font-medium sm:text-xs/5 forced-colors:outline bg-lime-400/20 text-lime-700 group-data-[hover]:bg-lime-400/30 dark:bg-lime-400/10 dark:text-lime-300 dark:group-data-[hover]:bg-lime-400/15">
-                                        {event?.status}
-                                    </span>
-            <Dropdown>
-                <DropdownButton className="mb-2.5">
-                    <EllipsisVerticalIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />
-                </DropdownButton>
-                <DropdownMenu className="" anchor="bottom end">
-                    <DropdownItem onClick={() => publishEvent()}>
-                        <Cog8ToothIcon />
-                        <DropdownLabel>Publish</DropdownLabel>
-                    </DropdownItem>
-                </DropdownMenu>
-            </Dropdown>
-                                </div>
-        </div>
-        <hr
-            role="presentation"
-            className="w-full border-t border-zinc-950/10 dark:border-white/10"
-        />
-        </li>
-        </ul>
+                        {event && <EventListItem event={event} imagesInfo={imagesInfo} />}
+                    </ul>
         <div
             onClick={() => {
                 document.getElementById("file-upload")?.click()
@@ -160,19 +96,29 @@ export default function EventDetails() {
 }
 
 
-export const Images = ({event}) => {
+export const Images = ({event}: {event: EVENT}) => {
     const [files, setFiles] = useState<{image_uri: string}[]>([]);
+    const [hasMoreImages, setHasMoreImages] = useState(true);
+    const [pageNo, setPageNo] = useState(1);
+    const limit = 25;
 
     const getImages = () => {
-        axios.get(`/events/${event.id}/images`).then(res => {
-            setFiles(res.data.images);
-            // setLoading(false);
+        axios.get(`/events/${event.id}/images`, {
+            params: {page: pageNo}
+        }).then(res => {
+            if (res.data.images.length) {
+                setFiles(files.concat(res.data.images));
+            }
+
+            if (res.data.images.length < limit) {
+                setHasMoreImages(false);
+            }
         })
     }
 
     useEffect(() => {
         getImages();
-    }, []);
+    }, [pageNo]);
 
     return (
         <>
@@ -198,6 +144,9 @@ export const Images = ({event}) => {
                 </li>
             ))}
         </ul>
+        {hasMoreImages && <div className="flex justify-center pb-2" >
+            <button className="" onClick={() => setPageNo(pageNo + 1)}> Load More</button>
+        </div>}
         </>
     );
 }
