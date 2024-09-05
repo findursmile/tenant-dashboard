@@ -10,6 +10,7 @@ export default function EventDetails() {
     const [loading, setLoading] = useState(true);
     const [event, setEvent] = useState<EVENT|null>(null);
     const [imagesInfo, setImagesInfo] = useState<ImageInfo[]>([]);
+    const [imagesKey, setImagesKey] = useState(0);
     const {eventId} = useParams();
 
     const getEvent = () => {
@@ -20,7 +21,7 @@ export default function EventDetails() {
         })
     }
 
-    const searchImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const addImages = (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.length) {
             return;
         }
@@ -29,6 +30,7 @@ export default function EventDetails() {
         [...e.target.files].forEach(fileBlob => frmData.append('images[]', fileBlob));
         axios.post(`/events/${eventId}/images`, frmData).then(_ => {
             setLoading(false);
+            setImagesKey(imagesKey + 1);
         });
     }
 
@@ -71,9 +73,6 @@ export default function EventDetails() {
                         {event && <EventListItem event={event} imagesInfo={imagesInfo} />}
                     </ul>
         <div
-            onClick={() => {
-                document.getElementById("file-upload")?.click()
-            }}
             className="flex justify-center rounded-lg border border-dashed border-gray-900/25 hover:border-gray-500 cursor-pointer px-6 py-10 my-5 hover:text-zinc-600 dark:hover:text-white">
             <div className="mt-4 text-center text-sm leading-6 ">
                 <label
@@ -81,13 +80,13 @@ export default function EventDetails() {
                     className="relative inline-block cursor-pointer rounded-md bg-white dark:bg-transparent font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                 >
                     <span>Upload a file</span>
-                    <input multiple onChange={searchImage} id="file-upload" name="file-upload" type="file" className="sr-only" />
                 </label>
                 <p className="pl-1">Drag and Drop JPG files up to 10MB</p>
             </div>
         </div>
+        <input multiple onChange={addImages} id="file-upload" name="file-upload" type="file" className="sr-only" />
 
-        {event && <Images event={event} />}
+        {event && <Images event={event} key={imagesKey} />}
 
         </div>
         </div>
