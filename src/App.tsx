@@ -6,7 +6,7 @@ import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
 import Calendar from './pages/Calendar';
-import ECommerce from './pages/Dashboard/ECommerce';
+import Dashboard from './pages/Dashboard/Dashboard.tsx';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile.tsx';
 import Events from './pages/Events.tsx';
@@ -15,6 +15,8 @@ import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import FormLayout from './pages/Form/FormLayout.tsx';
 import FormElements from './pages/Form/FormElements.tsx';
+import EventDetails from './pages/EventDetails.tsx';
+import NoMatch from './common/NoMatch.tsx';
 
 
 function App() {
@@ -37,11 +39,11 @@ function App() {
         <>
       <Routes>
         <Route
-          index
+          path="/"
           element={
             <PrivateRoute>
               <PageTitle title="Find Your Smile | Dashboard" />
-              <ECommerce />
+              <Dashboard />
             </PrivateRoute>
           }
         />
@@ -78,6 +80,15 @@ function App() {
             <PrivateRoute>
               <PageTitle title="Find Your Smile | Events" />
               <AddEvent />
+            </PrivateRoute>
+          }
+        />
+        <Route
+            path="/events/:eventId"
+          element={
+            <PrivateRoute>
+              <PageTitle title="Find Your Smile | Edit Event" />
+              <EventDetails />
             </PrivateRoute>
           }
         />
@@ -123,6 +134,15 @@ function App() {
             <>
               <PageTitle title="Find Your Smile | Signup" />
               <SignUp />
+            </>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <>
+              <PageTitle title="Find Your Smile | Signup" />
+              <NoMatch />
             </>
           }
         />
