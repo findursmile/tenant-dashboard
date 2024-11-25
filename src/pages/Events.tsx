@@ -214,7 +214,7 @@ export const EventListItem = ({event, imagesInfo}: {event: EVENT, imagesInfo?: I
                         <Link aria-hidden="true" data-headlessui-state="" href={`/events/${event?.id}`}>
                             <img
                                 className="aspect-[3/2] rounded-lg shadow"
-                                src={API_HOSTNAME + event?.cover_photo}
+                                src={import.meta.env.VITE_API_BASE_URI + event?.cover_photo}
                                 alt=""
                             />
                         </Link>
