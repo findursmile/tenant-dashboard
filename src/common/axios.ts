@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { tokenKey } from '../context/AuthContext';
 
-export const API_HOSTNAME = 'http://localhost:8080/';
-
-axios.defaults.baseURL = 'http://localhost:8080/api';
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URI;
 axios.interceptors.request.use(function (config) {
     // Do something before request is sent
     const token = localStorage.getItem('token');

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import DefaultLayout from '../layout/DefaultLayout';
 import axios from 'axios';
-import {API_HOSTNAME} from '../common/axios'
 import { Cog8ToothIcon, EllipsisVerticalIcon } from "@heroicons/react/16/solid";
 import { Dropdown, DropdownButton, DropdownItem, DropdownLabel, DropdownMenu } from "../components/catalyst/dropdown";
 import { Link } from '../components/catalyst/link';
@@ -142,7 +141,7 @@ const Events = () => {
                                             <Link aria-hidden="true" data-headlessui-state="" href={`/events/${event.id}`}>
                                                 <img
                                                     className="aspect-[3/2] rounded-lg shadow"
-                                                    src={API_HOSTNAME + event.cover_photo}
+                                                    src={import.meta.env.VITE_IMAGE_BASE_URI + event.cover_photo}
                                                     alt=""
                                                 />
                                             </Link>

@@ -33,7 +33,7 @@ const SignIn: React.FC = () => {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:8080/api/signin',
+      const response = await axios.post('signin',
         { email, password },
         { headers: { 'Content-Type': 'application/json' } }
         );

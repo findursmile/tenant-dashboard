@@ -2,7 +2,6 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 import DefaultLayout from "../layout/DefaultLayout";
-import { API_HOSTNAME } from "../common/axios";
 import { EVENT, EventListItem, ImageInfo } from "./Events";
 import { Link } from "../components/catalyst/link";
 
@@ -135,7 +134,7 @@ export const Images = ({event}: {event: EVENT}) => {
             {files.map((file, i) => (
                 <li key={i} className="relative">
                     <div className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
-                        <img src={API_HOSTNAME + file.image_uri} alt="" className="pointer-events-none object-cover group-hover:opacity-75" />
+                        <img src={import.meta.env.VITE_IMAGE_BASE_URI + file.image_uri} alt="" className="pointer-events-none object-cover group-hover:opacity-75" />
                         <button type="button" className="absolute inset-0 focus:outline-none">
                             <span className="sr-only">View details for {file.image_uri}</span>
                         </button>
