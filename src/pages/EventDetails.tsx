@@ -5,6 +5,9 @@ import DefaultLayout from "../layout/DefaultLayout";
 import { EVENT, ImageInfo } from "./Events";
 import { EventListItem } from './Event/EventListItem';
 import { Link } from "../components/catalyst/link";
+import { ArrowPathIcon, TrashIcon } from "@heroicons/react/16/solid";
+import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "../components/catalyst/dialog";
+import { Button } from "../components/catalyst/button";
 
 export default function EventDetails() {
     const [loading, setLoading] = useState(true);
@@ -96,10 +99,11 @@ export default function EventDetails() {
 
 
 export const Images = ({event}: {event: EVENT}) => {
-    const [files, setFiles] = useState<{image_uri: string}[]>([]);
+    const [files, setFiles] = useState<{id: string, image_uri: string}[]>([]);
     const [hasMoreImages, setHasMoreImages] = useState(true);
     const [pageNo, setPageNo] = useState(1);
     const limit = 25;
+    const [promptDelete, setPrompotDelete] = useState(false);
 
     const getImages = () => {
         axios.get(`/events/${event.id}/images`, {
@@ -134,11 +138,15 @@ export const Images = ({event}: {event: EVENT}) => {
         <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
             {files.map((file, i) => (
                 <li key={i} className="relative">
-                    <div className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
+                    <div className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 ">
                         <img src={import.meta.env.VITE_IMAGE_BASE_URI + file.image_uri} alt="" className="pointer-events-none object-cover group-hover:opacity-75" />
-                        <button type="button" className="absolute inset-0 focus:outline-none">
-                            <span className="sr-only">View details for {file.image_uri}</span>
-                        </button>
+                        <DeleteImage
+                            eventId={event.id}
+                            imageId={file.id}
+                            onClose={() => {
+                                files.splice(i, 1);
+                                setFiles([...files]);
+                            }} />
                     </div>
                 </li>
             ))}
@@ -146,6 +154,46 @@ export const Images = ({event}: {event: EVENT}) => {
         {hasMoreImages && <div className="flex justify-center pb-2" >
             <button className="" onClick={() => setPageNo(pageNo + 1)}> Load More</button>
         </div>}
+        </>
+    );
+}
+
+export const DeleteImage = ({onClose, eventId, imageId}: {eventId: string, imageId: string, onClose: Function})  => {
+    const [promptDelete, setPrompotDelete] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+
+    const deleteImage = () => {
+        if (deleting) {
+            return;
+        }
+
+        setDeleting(true);
+        axios.delete(`/events/${eventId}/images/${imageId}`).then(() => {
+            onClose();
+            setPrompotDelete(false);
+            setDeleting(false);
+        });
+    }
+
+    return (
+        <>
+            <Dialog open={promptDelete} onClose={() => {}}>
+                <DialogTitle>Confirm</DialogTitle>
+                <DialogDescription>
+                    Are you sure, want to delete this image?
+                </DialogDescription>
+                <DialogActions>
+                    <Button plain onClick={() => {setPrompotDelete(false)}}>Cancel</Button>
+                    <Button disabled={deleting} onClick={() => {deleteImage()}} color="rose">
+                        {deleting ? 'Deleting' : 'Delete'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <span className="absolute top-0 right-0 invisible group-hover:visible cursor-pointer hover:cursor-pointer p-1">
+                <Button onClick={() => {setPrompotDelete(true); }} color="rose" className="cursor-pointer">
+                    <TrashIcon className="h-6 w-6 text-red-500" />
+                </Button>
+            </span>
         </>
     );
 }

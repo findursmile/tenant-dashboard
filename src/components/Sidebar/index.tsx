@@ -48,7 +48,6 @@ function Example() {
             <Square2StackIcon />
             <SidebarLabel>Events</SidebarLabel>
           </SidebarItem>
-
         </SidebarSection>
         <SidebarSpacer />
       </SidebarBody>

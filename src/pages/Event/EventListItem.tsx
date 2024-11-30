@@ -11,6 +11,7 @@ export const EventListItem = ({ event, imagesInfo }: { event: EVENT; imagesInfo?
     const [promptDelete, setPromptDelete] = useState(false);
     const publishEvent = () => {
         axios.put(`/events/${event.id}/publish`).then(() => {
+            event.status = "publish";
         });
     };
 
