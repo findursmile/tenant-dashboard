@@ -233,8 +233,8 @@ export const EventListItem = ({event, imagesInfo}: {event: EVENT, imagesInfo?: I
                             <div>
                                 {imagesInfo?.map((info, i) => (
                                     <>
-                                        {!!i ? " | " : ""}
-                                        <div key={i} className="text-xs/6 text-zinc-600 inline-block">{info.count} {info.status}</div>
+                                        {!!i ? " | " : " "}
+                                        <div key={i} className="text-xs/6 text-zinc-600 inline-block"> {info.count} {info.status}</div>
                                     </>
                                 ))}
                             </div>
