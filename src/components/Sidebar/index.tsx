@@ -19,24 +19,13 @@ import {
 } from '../../components/catalyst/sidebar'
 import {
   ArrowRightStartOnRectangleIcon,
-  ChevronDownIcon,
   ChevronUpIcon,
   Cog8ToothIcon,
-  LightBulbIcon,
-  PlusIcon,
-  ShieldCheckIcon,
   UserIcon,
 } from '@heroicons/react/16/solid'
 import {
-  Cog6ToothIcon,
   HomeIcon,
-  InboxIcon,
-  MagnifyingGlassIcon,
-  MegaphoneIcon,
-  QuestionMarkCircleIcon,
-  SparklesIcon,
   Square2StackIcon,
-  TicketIcon,
 } from '@heroicons/react/20/solid'
 import { Button } from '../catalyst/button'
 
