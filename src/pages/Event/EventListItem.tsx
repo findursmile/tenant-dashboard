@@ -1,19 +1,36 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Cog8ToothIcon, EllipsisVerticalIcon, TrashIcon } from "@heroicons/react/16/solid";
+import { ArrowTopRightOnSquareIcon, ClipboardIcon, Cog8ToothIcon, EllipsisVerticalIcon, TrashIcon } from "@heroicons/react/16/solid";
 import { Dropdown, DropdownButton, DropdownItem, DropdownLabel, DropdownMenu } from "../../components/catalyst/dropdown";
 import { Link } from '../../components/catalyst/link';
 import { EVENT, ImageInfo } from '../Events';
 import { DeleteEvent } from './Delete';
+import { Button } from '../../components/catalyst/button';
 
 
 export const EventListItem = ({ event, imagesInfo }: { event: EVENT; imagesInfo?: ImageInfo[]; }) => {
     const [promptDelete, setPromptDelete] = useState(false);
+
+    const [copied, setCopied] = useState(false);
+
     const publishEvent = () => {
         axios.put(`/events/${event.id}/publish`).then(() => {
             event.status = "publish";
         });
     };
+
+    const getUserFrontEndUrl = () => {
+        return import.meta.env.VITE_USER_BASE_URI+"event/"+event.id;
+    }
+
+    const copyUserFrontEndUrl = async () => {
+        const type = "text/plain";
+        const blob = new Blob([getUserFrontEndUrl()], {type});
+        const data = [new ClipboardItem({[type]: blob})];
+        await navigator?.clipboard?.write(data);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    }
 
     const onDeletePromptClose = (status?: Boolean) => {
         setPromptDelete(false);
@@ -60,8 +77,16 @@ export const EventListItem = ({ event, imagesInfo }: { event: EVENT; imagesInfo?
                     <span className="max-sm:hidden inline-flex items-center gap-x-1.5 rounded-md px-1.5 py-0.5 text-sm/5 font-medium sm:text-xs/5 forced-colors:outline bg-lime-400/20 text-lime-700 group-data-[hover]:bg-lime-400/30 dark:bg-lime-400/10 dark:text-lime-300 dark:group-data-[hover]:bg-lime-400/15">
                         {event?.status}
                     </span>
+                    <Button plain target="_blank" href={getUserFrontEndUrl()}>
+                        <ArrowTopRightOnSquareIcon />
+                    </Button>
+                    <Button
+                        {...(copied ? {color: "emerald"} : {plain: true})}
+                        onClick={copyUserFrontEndUrl} >
+                        <ClipboardIcon className="cursor-pointer" />
+                    </Button>
                     <Dropdown>
-                        <DropdownButton plain className="mb-2.5">
+                        <DropdownButton plain className="cursor-pointer">
                             <EllipsisVerticalIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />
                         </DropdownButton>
                         <DropdownMenu className="" anchor="bottom end">

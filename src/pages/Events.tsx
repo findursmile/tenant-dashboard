@@ -130,8 +130,6 @@ const Events = () => {
                         ))}
                     </ul>
                 </div>
-
-
             </div>
         </DefaultLayout>
     );
